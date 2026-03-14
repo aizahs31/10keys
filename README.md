@@ -7,7 +7,7 @@ A fully functional, web-based typing practice application built for a custom **1
 Standard keyboards have over 100 keys, which can be overwhelming for visually impaired users learning to navigate a computer. The **TouchKey Typing Trainer** solves this by using a minimalist 10-key layout. By combining single presses, double presses, and dual-key chords, users can type the entire alphabet. This application serves as an interactive, accessible training ground to master this unique layout.
 
 ## ✨ Features
-- 🔌 **Hardware Integration:** Connects seamlessly to Arduino devices via USB Serial or generic BLE modules using Web Bluetooth.
+- 🔌 **Hardware Integration:** Connects seamlessly to Arduino devices via USB Serial.
 - ⌨️ **Virtual Keyboard:** Real-time 10-key visualization that highlights on input to help users visualize their keypresses.
 - ⏱️ **Monkeytype-style Typing Mode:** Green/Red character tracking with instant WPM, Accuracy, Error counts, and Backspace support.
 - 🔊 **Voice Feedback:** High-speed, natural audio feedback utilizing the Web Speech API in-browser, or globally across your OS via the Python script.
@@ -19,7 +19,7 @@ Standard keyboards have over 100 keys, which can be overwhelming for visually im
 ## 🛠️ Technology Stack
 - **Frontend:** React 19 + Vite 6
 - **Styling:** TailwindCSS v4
-- **Hardware Comms:** Web Serial API & Web Bluetooth API
+- **Hardware Comms:** Web Serial API
 - **Accessibility:** Web Speech API (Browser) & SAPI5/win32com (Windows OS)
 - **Microcontroller:** Arduino (Mega/Uno or compatible)
 - **Global OS Support:** Python script (`keystroke.py`) translates serial inputs directly to OS keystrokes and provides global text-to-speech.
