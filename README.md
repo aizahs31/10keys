@@ -1,22 +1,22 @@
-# TouchKey Typing Trainer 🎹
+TouchKey Typing Trainer 🎹
 
 A fully functional, web-based typing practice application built for a custom **10-key hardware keyboard** designed for visually impaired individuals. The application connects directly to an Arduino microcontroller via the Web Serial API.
 
-## 🌟 Motivation
+## Motivation
 
 Standard keyboards have over 100 keys, which can be overwhelming for visually impaired users learning to navigate a computer. The **TouchKey Typing Trainer** solves this by using a minimalist 10-key layout. By combining single presses, double presses, and dual-key chords, users can type the entire alphabet. This application serves as an interactive, accessible training ground to master this unique layout.
 
-## ✨ Features
-- 🔌 **Hardware Integration:** Connects seamlessly to Arduino devices via USB Serial.
-- ⌨️ **Virtual Keyboard:** Real-time 10-key visualization that highlights on input to help users visualize their keypresses.
-- ⏱️ **Monkeytype-style Typing Mode:** Green/Red character tracking with instant WPM, Accuracy, Error counts, and Backspace support.
-- 🔊 **Voice Feedback:** High-speed, natural audio feedback utilizing the Web Speech API in-browser, or globally across your OS via the Python script.
-- 🕶️ **Blind Mode:** Designed to hide visual tests and rely entirely on auditory feedback for a true accessible experience.
-- 🎮 **Simulator Mode:** Built-in keyboard interceptor allowing the web app to be demonstrated *without* the hardware connected.
+## Features
+-  **Hardware Integration:** Connects seamlessly to Arduino devices via USB Serial.
+-  **Virtual Keyboard:** Real-time 10-key visualization that highlights on input to help users visualize their keypresses.
+-  **Monkeytype-style Typing Mode:** Green/Red character tracking with instant WPM, Accuracy, Error counts, and Backspace support.
+-  **Voice Feedback:** High-speed, natural audio feedback utilizing the Web Speech API in-browser, or globally across your OS via the Python script.
+-  **Blind Mode:** Designed to hide visual tests and rely entirely on auditory feedback for a true accessible experience.
+-  **Simulator Mode:** Built-in keyboard interceptor allowing the web app to be demonstrated *without* the hardware connected.
 
 ---
 
-## 🛠️ Technology Stack
+## Technology Stack
 - **Frontend:** React 19 + Vite 6
 - **Styling:** TailwindCSS v4
 - **Hardware Comms:** Web Serial API
@@ -26,7 +26,7 @@ Standard keyboards have over 100 keys, which can be overwhelming for visually im
 
 ---
 
-## 🔠 The 10-Key Mapping System
+##  The 10-Key Mapping System
 
 The Arduino handles the complex logic of converting key combinations into characters. Here is how the 10 physical keys (labeled K1 to K10) map to the alphabet:
 
@@ -47,7 +47,7 @@ The Arduino handles the complex logic of converting key combinations into charac
 
 ---
 
-## 🚀 Setup & Workflow
+##  Setup & Workflow
 
 To get this project running, you need to set up both the **Software (Web App)** and the **Hardware (Arduino)**.
 
@@ -91,7 +91,7 @@ If you want to use the keyboard outside the web app (e.g., in Notepad or Word) w
 
 ---
 
-## 📁 Project Structure
+##  Project Structure
 
 ```text
 ├── sketch.ino               # Hardware: The Arduino firmware logic
@@ -116,8 +116,3 @@ If you want to use the keyboard outside the web app (e.g., in Notepad or Word) w
 ```
 
 ---
-
-## 🔮 Future Enhancements
-- **Leaderboards:** Implement a backend database to track high scores globally.
-- **Custom Hardware Mapping UI:** Allow users to redefine which keys map to which letters directly in the browser.
-- **Numbers & Punctuation Support:** Expand the Arduino sketch to support a "shift" or modifier layer for numbers and symbols.
