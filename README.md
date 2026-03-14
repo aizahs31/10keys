@@ -1,4 +1,4 @@
-TouchKey Typing Trainer 🎹
+# 10 KEYS
 
 A fully functional, web-based typing practice application built for a custom **10-key hardware keyboard** designed for visually impaired individuals. The application connects directly to an Arduino microcontroller via the Web Serial API.
 
