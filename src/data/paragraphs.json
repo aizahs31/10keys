@@ -1,0 +1,20 @@
+{
+  "beginner": [
+    "the cat sat on the mat and looked at the dog",
+    "a big red fox ran over the hill and back again",
+    "the sun is bright the sky is blue and birds sing",
+    "she held the book and read each page with interest"
+  ],
+  "medium": [
+    "every student should practice typing each day to build strong skills",
+    "the quick brown fox jumps over the lazy dog on a warm afternoon",
+    "accessible technology empowers independence and improves quality of life",
+    "learning new keyboard layouts takes patience but the results are worth it"
+  ],
+  "advanced": [
+    "the development of assistive technology has transformed how visually impaired individuals interact with digital devices on a daily basis",
+    "modern web applications leverage serial communication protocols to bridge the gap between custom hardware and browser based interfaces",
+    "ergonomic keyboard design considers finger placement reach distance and the cognitive load required to memorize complex key combinations",
+    "inclusive design principles emphasize that products should be usable by all people to the greatest extent possible without adaptation"
+  ]
+}
