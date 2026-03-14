@@ -41,9 +41,9 @@ The Arduino handles the complex logic of converting key combinations into charac
 | Char | k  | l  | m  | n  | o  | p  | q  | r  | s  | t   |
 
 ### Dual-Key Chords
-| Keys | K1+K2 | K2+K3 | K3+K4 | K7+K8 | K8+K9 | K9+K10 | K5+K6 |
-|------|-------|-------|-------|-------|-------|--------|-------|
-| Char | u     | v     | w     | x     | y     | z      | Space |
+| Keys | K1+K2 | K2+K3 | K3+K4 | K7+K8 | K8+K9 | K9+K10 | K5+K6 | K6+K7 |
+|------|-------|-------|-------|-------|-------|--------|-------|-------|
+| Char | u     | v     | w     | x     | y     | z      | Space |  Del  |
 
 ---
 
@@ -87,8 +87,8 @@ The web app requires Node.js to be installed.
 ## 📁 Project Structure
 
 ```text
-├── sketch.ino               # Hardware: The Arduino firmware logic
-├── package.json             # Software: Node dependencies 
+├── sketch.ino               # Hardware: The Arduino logic
+├── package.json             # Node dependencies 
 ├── index.html               # Entry HTML with Inter fonts
 └── src/
     ├── main.jsx             # React DOM injection
@@ -111,6 +111,9 @@ The web app requires Node.js to be installed.
 ---
 
 ## 🔮 Future Enhancements
-- **Leaderboards:** Implement a backend database to track high scores globally.
-- **Custom Hardware Mapping UI:** Allow users to redefine which keys map to which letters directly in the browser.
 - **Numbers & Punctuation Support:** Expand the Arduino sketch to support a "shift" or modifier layer for numbers and symbols.
+- **Build ergonomic keyboard:** Outer case + keys and keycaps.
+- **Use key macros:** Shortcuts for frequently used phrases.
+- **Better narrator voice:** Use a new narrator which is more human and pleasant to hear.
+- **Leaderboards:** Implement a backend database to track high scores globally for the typing test.
+- **Custom Hardware Mapping UI:** Allow users to redefine which keys map to which letters directly in the browser.

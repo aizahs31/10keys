@@ -6,24 +6,21 @@ import win32com.client
 import pythoncom
 from pynput.keyboard import Controller, Key
 
-# Text-to-Speech worker to avoid blocking the serial read loop
 def tts_worker(tts_queue):
     try:
         pythoncom.CoInitialize()
         speaker = win32com.client.Dispatch("SAPI.SpVoice")
-        speaker.Rate = 2 # Set slightly faster speaking rate
+        speaker.Rate = 4
         print("TTS Engine initialized and ready.")
         while True:
             text = tts_queue.get()
             if text is None:
                 break
-            # print(f"TTS: {text}")
             speaker.Speak(text)
             tts_queue.task_done()
     except Exception as e:
         print(f"TTS Error: {e}")
 
-# Start TTS background thread
 tts_q = queue.Queue()
 tts_thread = threading.Thread(target=tts_worker, args=(tts_q,), daemon=True)
 tts_thread.start()
@@ -77,6 +74,5 @@ while True:
         keyboard.type(line)
         tts_q.put(line.upper())
     else:
-        # Ignore random serial noise or unrecognized multi-char strings
         pass
 
