@@ -7,10 +7,10 @@ A fully functional, web-based typing practice application built for a custom **1
 Standard keyboards have over 100 keys, which can be overwhelming for visually impaired users learning to navigate a computer. The **TouchKey Typing Trainer** solves this by using a minimalist 10-key layout. By combining single presses, double presses, and dual-key chords, users can type the entire alphabet. This application serves as an interactive, accessible training ground to master this unique layout.
 
 ## ✨ Features
-- 🔌 **Hardware Integration:** Connects seamlessly to Arduino devices sending serial inputs.
+- 🔌 **Hardware Integration:** Connects seamlessly to Arduino devices via USB Serial or generic BLE modules using Web Bluetooth.
 - ⌨️ **Virtual Keyboard:** Real-time 10-key visualization that highlights on input to help users visualize their keypresses.
-- ⏱️ **Monkeytype-style Typing Mode:** Green/Red character tracking with instant WPM, Accuracy, and Error counts.
-- 🔊 **Voice Feedback:** High-speed, low-latency audio feedback utilizing the Web Speech API (reads the typed character instantly).
+- ⏱️ **Monkeytype-style Typing Mode:** Green/Red character tracking with instant WPM, Accuracy, Error counts, and Backspace support.
+- 🔊 **Voice Feedback:** High-speed, natural audio feedback utilizing the Web Speech API in-browser, or globally across your OS via the Python script.
 - 🕶️ **Blind Mode:** Designed to hide visual tests and rely entirely on auditory feedback for a true accessible experience.
 - 🎮 **Simulator Mode:** Built-in keyboard interceptor allowing the web app to be demonstrated *without* the hardware connected.
 
@@ -19,10 +19,10 @@ Standard keyboards have over 100 keys, which can be overwhelming for visually im
 ## 🛠️ Technology Stack
 - **Frontend:** React 19 + Vite 6
 - **Styling:** TailwindCSS v4
-- **Hardware Comms:** Web Serial API
-- **Accessibility:** Web Speech API
+- **Hardware Comms:** Web Serial API & Web Bluetooth API
+- **Accessibility:** Web Speech API (Browser) & SAPI5/win32com (Windows OS)
 - **Microcontroller:** Arduino (Mega/Uno or compatible)
-- **Legacy Support:** Python script (`keystroke.py`) provided for translating serial directly to OS keystrokes.
+- **Global OS Support:** Python script (`keystroke.py`) translates serial inputs directly to OS keystrokes and provides global text-to-speech.
 
 ---
 
@@ -75,12 +75,19 @@ The web app requires Node.js to be installed.
 4. Open your browser (Google Chrome or Microsoft Edge only — Firefox/Safari do not support Web Serial API) and navigate to `http://localhost:5173`.
 
 ### 3. Usage & Connection
-1. In the Web App, click **Connect Hardware**.
-2. A browser prompt will appear asking for permission. Select your Arduino's COM port (e.g., `COM3` on Windows, `/dev/tty.usbmodem` on Mac).
+1. In the Web App, choose either **Connect USB** or **Connect Bluetooth**.
+2. A browser prompt will appear asking for permission. Select your Arduino's COM port or your generic BLE module.
 3. Ensure **Voice Feedback** is toggled ON if required.
-4. Begin typing on the 10-key hardware! The virtual keys will flash green and the words will fill out perfectly on screen.
+4. Begin typing on the 10-key hardware! The virtual keys will flash green, mistakes can be deleted with Backspace, and words will fill out.
 
 > **Note on Simulator Mode:** If you do not have the hardware configured yet, simply click **"Try Simulator"** in the header. You can then use your regular PC keyboard to type letters and simulate the hardware behavior.
+
+### 4. Global OS Voice Support (Optional)
+If you want to use the keyboard outside the web app (e.g., in Notepad or Word) with voice feedback:
+1. Ensure your device is plugged in via USB.
+2. Install Python dependencies: `pip install pyserial pynput pywin32`
+3. Run the script: `python keystroke.py`
+4. The script will auto-detect your COM port and use the native Windows SAPI voice engine to speak your characters globally as you type.
 
 ---
 
