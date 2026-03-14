@@ -57,6 +57,7 @@ export default function App() {
     isSimulating,
     lastChar,
     connect,
+    connectBluetooth,
     disconnect,
     toggleSimulation
   } = useSerialConnection(handleCharReceived);
@@ -86,6 +87,7 @@ export default function App() {
         isConnected={isConnected}
         isSimulating={isSimulating}
         onConnect={connect}
+        onConnectBluetooth={connectBluetooth}
         onDisconnect={disconnect}
         onToggleSimulate={toggleSimulation}
         voiceEnabled={voiceEnabled}

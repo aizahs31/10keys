@@ -47,8 +47,21 @@ export function useTypingStats(targetText) {
     if (status === 'completed') return;
 
     if (status === 'idle') {
+      if (char === 'Backspace') return; // Don't start on backspace
       setStartTime(Date.now());
       setStatus('active');
+    }
+
+    if (char === 'Backspace') {
+      if (typedText.length === 0) return;
+      
+      const newText = typedText.slice(0, -1);
+      setTypedText(newText);
+      
+      const correctCount = newText.split('').filter((c, i) => c === targetText[i]).length;
+      setAccuracy(calcAccuracy(correctCount, Math.max(1, newText.length)));
+      
+      return;
     }
 
     const currentIndex = typedText.length;

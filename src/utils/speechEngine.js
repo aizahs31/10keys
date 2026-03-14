@@ -26,9 +26,10 @@ export function speak(text) {
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 3.0; // Very fast rate for quick typing feedback
+  utterance.rate = 1.5; // Adjusted rate for clearer feedback
   utterance.pitch = 1.0;
   utterance.volume = 1.0;
+  // Use a reliable default voice if possible, else defaults to en-US
   utterance.lang = 'en-US';
 
   window.speechSynthesis.speak(utterance);

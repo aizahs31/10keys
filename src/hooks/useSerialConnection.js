@@ -14,20 +14,27 @@ export function useSerialConnection(onCharReceived) {
 
   const portRef = useRef(null);
   const readerRef = useRef(null);
+  const bluetoothDeviceRef = useRef(null);
 
   // Fallback simulator for demo purposes without hardware
   useEffect(() => {
     if (isConnected || !isSimulating) return;
 
     const handleKeyDown = (e) => {
-      // Prevent capturing meta keys or functional keys
-      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length > 1) {
+      // Prevent capturing meta keys
+      if (e.ctrlKey || e.metaKey || e.altKey) {
         return;
       }
 
-      // Convert layout to hardware style: we only receive lower-case letters and spaces
-      let char = e.key.toLowerCase();
-      if (char === ' ') char = ' ';
+      let char;
+      if (e.key === 'Backspace') {
+        char = 'Backspace';
+      } else if (e.key.length > 1) {
+        return;
+      } else {
+        // Convert layout to hardware style: we only receive lower-case letters and spaces
+        char = e.key.toLowerCase();
+      }
 
       // Simulate a small delay for hardware realism
       setTimeout(() => {
@@ -43,9 +50,14 @@ export function useSerialConnection(onCharReceived) {
     setIsSimulating(!isSimulating);
   };
 
+  const onCharReceivedRef = useRef(onCharReceived);
+  useEffect(() => {
+    onCharReceivedRef.current = onCharReceived;
+  }, [onCharReceived]);
+
   const handleIncomingData = (char) => {
     setLastChar(char);
-    if (onCharReceived) onCharReceived(char);
+    if (onCharReceivedRef.current) onCharReceivedRef.current(char);
   };
 
   // Connect via Web Serial
@@ -81,6 +93,79 @@ export function useSerialConnection(onCharReceived) {
     }
   };
 
+  // Connect via Web Bluetooth (BLE)
+  const connectBluetooth = async () => {
+    try {
+      if (!('bluetooth' in navigator)) {
+        alert('Web Bluetooth API is not supported in this browser. Use Chrome or Edge.');
+        return;
+      }
+
+      // Request either Nordic UART, HM-10, or generic Serial over BLE
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: [
+          '6e400001-b5a3-f393-e0a9-e50e24dcca9e', // Nordic UART
+          '0000ffe0-0000-1000-8000-00805f9b34fb'  // HM-10 / CC2541
+        ]
+      });
+
+      const server = await device.gatt.connect();
+
+      let service, characteristic;
+      try {
+        // Try HM-10 / generic TTL serial first
+        service = await server.getPrimaryService('0000ffe0-0000-1000-8000-00805f9b34fb');
+        characteristic = await service.getCharacteristic('0000ffe1-0000-1000-8000-00805f9b34fb');
+      } catch (e1) {
+        try {
+          // Fall back to Nordic UART
+          service = await server.getPrimaryService('6e400001-b5a3-f393-e0a9-e50e24dcca9e');
+          characteristic = await service.getCharacteristic('6e400003-b5a3-f393-e0a9-e50e24dcca9e'); // TX
+        } catch (e2) {
+          throw new Error("Could not find a supported Serial/UART BLE service on this device.");
+        }
+      }
+
+      let bleBuffer = '';
+      characteristic.addEventListener('characteristicvaluechanged', (event) => {
+        const value = event.target.value;
+        const decoder = new TextDecoder('utf-8');
+        const text = decoder.decode(value);
+        
+        bleBuffer += text;
+        let lines = bleBuffer.split('\n');
+        
+        for (let i = 0; i < lines.length - 1; i++) {
+          const line = lines[i].replace('\r', '').trim();
+          if (line.length === 1 || line === ' ' || line === 'Backspace') {
+            handleIncomingData(line);
+          }
+        }
+        bleBuffer = lines[lines.length - 1];
+      });
+
+      await characteristic.startNotifications();
+
+      device.addEventListener('gattserverdisconnected', () => {
+        setIsConnected(false);
+        setRawOutput('Bluetooth disconnected.\n');
+        bluetoothDeviceRef.current = null;
+      });
+
+      bluetoothDeviceRef.current = device;
+      setIsConnected(true);
+      setIsSimulating(false);
+      setRawOutput('Bluetooth connected...\n');
+
+    } catch (e) {
+      console.error('Bluetooth connection error:', e);
+      if (e.name !== 'NotFoundError') {
+        alert('Could not connect to the Bluetooth device. ' + e.message);
+      }
+    }
+  };
+
   // Disconnect
   const disconnect = async () => {
     try {
@@ -92,10 +177,14 @@ export function useSerialConnection(onCharReceived) {
         await portRef.current.close();
         portRef.current = null;
       }
+      if (bluetoothDeviceRef.current && bluetoothDeviceRef.current.gatt.connected) {
+        bluetoothDeviceRef.current.gatt.disconnect();
+        bluetoothDeviceRef.current = null;
+      }
       setIsConnected(false);
       setRawOutput('Disconnected.\n');
     } catch (e) {
-      console.error('Serial disconnect error:', e);
+      console.error('Disconnect error:', e);
     }
   };
 
@@ -113,7 +202,7 @@ export function useSerialConnection(onCharReceived) {
         // Process all complete lines
         for (let i = 0; i < lines.length - 1; i++) {
           const line = lines[i].replace('\r', '').trim();
-          if (line.length === 1 || line === ' ') {
+          if (line.length === 1 || line === ' ' || line === 'Backspace') {
             handleIncomingData(line);
           }
         }
@@ -134,6 +223,7 @@ export function useSerialConnection(onCharReceived) {
     lastChar,
     rawOutput,
     connect,
+    connectBluetooth,
     disconnect,
     toggleSimulation
   };

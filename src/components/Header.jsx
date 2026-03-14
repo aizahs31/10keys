@@ -4,6 +4,7 @@ export default function Header({
   isConnected,
   isSimulating,
   onConnect,
+  onConnectBluetooth,
   onDisconnect,
   onToggleSimulate,
   voiceEnabled,
@@ -66,12 +67,20 @@ export default function Header({
 
         {/* Action Buttons */}
         {!isConnected && !isSimulating && (
-          <button
-            onClick={onConnect}
-            className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-lg shadow-green-500/30 transition-all border border-green-400"
-          >
-            Connect Hardware
-          </button>
+          <div className="flex gap-2">
+            <button
+              onClick={onConnect}
+              className="px-4 py-2 bg-green-600 hover:bg-green-500 text-white font-semibold rounded-lg shadow-lg shadow-green-500/30 transition-all border border-green-400"
+            >
+              Connect USB
+            </button>
+            <button
+              onClick={onConnectBluetooth}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-lg shadow-lg shadow-blue-500/30 transition-all border border-blue-400"
+            >
+              Connect Bluetooth
+            </button>
+          </div>
         )}
 
         {!isConnected && !isSimulating && (
