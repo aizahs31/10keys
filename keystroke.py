@@ -20,7 +20,6 @@ while True:
 
     line = raw.decode("utf-8").replace("\r","").replace("\n","")
 
-    # ignore garbage
     if line == "":
         continue
 

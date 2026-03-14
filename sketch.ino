@@ -1,7 +1,9 @@
 const int pins[10] = {11,10,9,8,7,6,5,4,3,2};
+const int shiftPin = 14;
 
 char singleLetters[10] = {'a','b','c','d','e','f','g','h','i','j'};
 char doubleLetters[10] = {'k','l','m','n','o','p','q','r','s','t'};
+char digits[10] = {'1','2','3','4','5','6','7','8','9','0'};
 
 bool waitingSecond[10];
 unsigned long firstPressTime[10];
@@ -12,6 +14,8 @@ void setup() {
 
   Serial.begin(9600);
 
+  pinMode(shiftPin, INPUT_PULLUP);
+
   for(int i=0;i<10;i++){
     pinMode(pins[i], INPUT_PULLUP);
     waitingSecond[i] = false;
@@ -19,6 +23,8 @@ void setup() {
 }
 
 void loop() {
+
+  bool shiftActive = digitalRead(shiftPin) == LOW;
 
   bool anyPressed = false;
 
@@ -45,19 +51,21 @@ void loop() {
       if(!stillPressed) break;
     }
 
-    decodeChord(chord);
-    delay(30);
+    decodeChord(chord, shiftActive);
+    delay(40);
   }
 
-  for(int i=0;i<10;i++){
-    if(waitingSecond[i] && millis() - firstPressTime[i] > doubleTime){
-      Serial.println(singleLetters[i]);
-      waitingSecond[i] = false;
+  if(!shiftActive){
+    for(int i=0;i<10;i++){
+      if(waitingSecond[i] && millis() - firstPressTime[i] > doubleTime){
+        Serial.println(singleLetters[i]);
+        waitingSecond[i] = false;
+      }
     }
   }
 }
 
-void decodeChord(bool k[10]){
+void decodeChord(bool k[10], bool shiftActive){
 
   int count = 0;
   int index = -1;
@@ -67,6 +75,15 @@ void decodeChord(bool k[10]){
       count++;
       index = i;
     }
+  }
+
+  if(shiftActive){
+
+    if(count == 1){
+      Serial.println(digits[index]);
+    }
+
+    return;
   }
 
   if(count == 2){
